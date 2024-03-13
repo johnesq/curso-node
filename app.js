@@ -1,35 +1,36 @@
-const net = require('net');
 const { MongoClient } = require('mongodb');
-
-const port = process.argv[3] || 80;
-const host = process.argv[2] || "t9j3b3fv-80.brs.devtunnels.ms";
+const net = require('net');
 
 const uri = 'mongodb+srv://hola:~~~Buenavida8@cluster0.va8jp6n.mongodb.net/test?retryWrites=true&w=majority';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-async function connectToDatabase() {
-    try {
-        await client.connect();
-        console.log('Conexión exitosa a MongoDB');
-    } catch (error) {
-        console.error('Error al conectar a MongoDB:', error);
-    }
-}
+const port = process.argv[3] || 80;
+const host = process.argv[2] || "t9j3b3fv-80.brs.devtunnels.ms";
 
 const socket = new net.Socket();
 
-socket.on('connect', function() {
-    console.log("Conexión establecida con el servidor en el puerto " + port + " de " + host);
-});
+socket.on('connect', async () => {
+    console.log(`Conexión establecida con el servidor en el puerto ${port} de ${host}`);
 
-socket.on('data', async function(data) {
-    const receivedData = data.toString(); // Corrección: asigna los datos recibidos a una variable
-    console.log("Datos recibidos del servidor:", receivedData);
+    try {
+        await client.connect();
+        console.log('Conexión exitosa a MongoDB');
 
-    // Insertar los datos en la colección 'contenidos'
-    const db = client.db('pruebas');
-    const miColeccion = db.collection('contenidos');
-    await miColeccion.insertOne({ datos: receivedData });
+        const db = client.db('pruebas');
+        const miColeccion = db.collection('contenidos');
+
+        // Insertar datos (ejemplo)
+        await miColeccion.insertOne({ mensaje: 'Datos recibidos del servidor' });
+
+        // Obtener datos (ejemplo)
+        const data = await miColeccion.findOne({ mensaje: 'Datos recibidos del servidor' });
+        console.log('Datos obtenidos de la colección:', data);
+
+        // Cerrar la conexión a la base de datos
+        client.close();
+    } catch (error) {
+        console.error('Error al conectar a MongoDB:', error);
+    }
 });
 
 socket.on('error', function(err) {
