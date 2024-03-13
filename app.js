@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const net = require('net');
 
 const uri = 'mongodb+srv://hola:~~~Buenavida8@cluster0.va8jp6n.mongodb.net/test?retryWrites=true&w=majority';
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
 
 const port = process.argv[3] || 80;
 const host = process.argv[2] || "t9j3b3fv-80.brs.devtunnels.ms";
