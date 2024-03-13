@@ -24,7 +24,7 @@ socket.on('connect', function() {
 
 socket.on('data', async function(data) {
     const receivedData = data.toString(); // Corrección: asigna los datos recibidos a una variable
-    console.log("Datos recibidos del servidor:", receivedData);
+    console.log("Datos recibidos del servidor-ii:", receivedData);
 
     // Insertar los datos en la colección 'contenidos'
     const db = client.db('pruebas');
